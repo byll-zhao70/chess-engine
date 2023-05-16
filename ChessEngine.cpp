@@ -8,7 +8,7 @@
 using namespace std;
 
 class Board {
-    public:
+public:
     vector<vector<string>> board;
     unordered_map<string, vector<string>> blackPieces;
     unordered_map<string, vector<string>> whitePieces;
@@ -65,7 +65,6 @@ class Board {
             }
             board.push_back(row);
         }
-        board[6][0] = "";
         whitePieces["P"].push_back("a2");
         whitePieces["P"].push_back("b2");
         whitePieces["P"].push_back("c2");
@@ -110,9 +109,9 @@ class Board {
                 string pos = whitePieces["P"][i];
                 int row = stoi(pos.substr(1)) - 1;
                 int col = pos.at(0) - 'a';
-                if (pos.substr(1) == "2" && board[row+2][col].size() == 0)
+                if (pos.substr(1) == "2" && board[row + 2][col].size() == 0)
                 {
-                    output.push_back("P" + pos + pos.substr(0,1) + "4");
+                    output.push_back("P" + pos + pos.substr(0, 1) + "4");
                 }
                 if (board[row + 1][col].size() == 0)
                 {
@@ -130,15 +129,35 @@ class Board {
                 if (col > 0 && board[row + 1][col - 1].size() != 0 && board[row + 1][col - 1].substr(0, 1) == "B")
                 {
                     char newCol = pos.at(0) - 1;
-                    output.push_back("P" + pos + "x" + newCol + "" + board[row+1][col-1].substr(1,2) + to_string(row+2));
+                    if (row != 6)
+                    {
+                        output.push_back("P" + pos + "x" + newCol + "" + board[row + 1][col - 1].substr(1, 2) + to_string(row + 2));
+                    }
+                    else
+                    {
+                        output.push_back("P" + pos + "x" + newCol + "" + board[row + 1][col - 1].substr(1, 2) + to_string(row + 2) + "=Q");
+                        output.push_back("P" + pos + "x" + newCol + "" + board[row + 1][col - 1].substr(1, 2) + to_string(row + 2) + "=R");
+                        output.push_back("P" + pos + "x" + newCol + "" + board[row + 1][col - 1].substr(1, 2) + to_string(row + 2) + "=B");
+                        output.push_back("P" + pos + "x" + newCol + "" + board[row + 1][col - 1].substr(1, 2) + to_string(row + 2) + "=N");
+                    }
                 }
                 if (col < 7 && board[row + 1][col + 1].size() != 0 && board[row + 1][col + 1].substr(0, 1) == "B")
                 {
                     char newCol = pos.at(0) + 1;
-                    output.push_back("P" + pos + "x" + newCol + "" + board[row+1][col+1].substr(1,2) + to_string(row + 2));
+                    if (row != 6)
+                    {
+                        output.push_back("P" + pos + "x" + newCol + "" + board[row + 1][col + 1].substr(1, 2) + to_string(row + 2));
+                    }
+                    else
+                    {
+                        output.push_back("P" + pos + "x" + newCol + "" + board[row + 1][col + 1].substr(1, 2) + to_string(row + 2) + "=Q");
+                        output.push_back("P" + pos + "x" + newCol + "" + board[row + 1][col + 1].substr(1, 2) + to_string(row + 2) + "=R");
+                        output.push_back("P" + pos + "x" + newCol + "" + board[row + 1][col + 1].substr(1, 2) + to_string(row + 2) + "=B");
+                        output.push_back("P" + pos + "x" + newCol + "" + board[row + 1][col + 1].substr(1, 2) + to_string(row + 2) + "=N");
+                    }
                 }
             }
-            
+
             //knight
 
             for (int i = 0; i < whitePieces["N"].size(); i++)
@@ -146,11 +165,11 @@ class Board {
                 string pos = whitePieces["N"][i];
                 int row = stoi(pos.substr(1)) - 1;
                 int col = pos.at(0) - 'a';
-                if (row > 0 && col > 1 && (board[row-1][col-2].size() == 0 || board[row-1][col-2].substr(0,1) != "W"))
+                if (row > 0 && col > 1 && (board[row - 1][col - 2].size() == 0 || board[row - 1][col - 2].substr(0, 1) != "W"))
                 {
                     char newCol = pos.at(0) - 2;
                     if (board[row - 1][col - 2].size() != 0)
-                        output.push_back("N" + pos + "x" + board[row-1][col-2].substr(1,2) + string(1, newCol) + to_string(row));
+                        output.push_back("N" + pos + "x" + board[row - 1][col - 2].substr(1, 2) + string(1, newCol) + to_string(row));
                     else
                         output.push_back("N" + pos + string(1, newCol) + to_string(row));
                 }
@@ -221,7 +240,7 @@ class Board {
                 int col = pos.at(0) - 'a';
                 int currRow = row;
                 int currCol = col;
-                while (currRow < 7 && currCol < 7 && (board[currRow+1][currCol+1].size() == 0 || board[currRow+1][currCol+1].substr(0,1) != "W"))
+                while (currRow < 7 && currCol < 7 && (board[currRow + 1][currCol + 1].size() == 0 || board[currRow + 1][currCol + 1].substr(0, 1) != "W"))
                 {
                     char newCol = pos.at(0) + currCol - col + 1;
                     int newRow = currRow + 2;
@@ -263,7 +282,7 @@ class Board {
                     int newRow = currRow;
                     if (board[currRow - 1][currCol + 1].size() == 0)
                     {
-                        output.push_back("B" + pos +  string(1, newCol) + to_string(newRow));
+                        output.push_back("B" + pos + string(1, newCol) + to_string(newRow));
                         currRow--;
                         currCol++;
                     }
@@ -294,7 +313,7 @@ class Board {
             }
 
             //rook
-            
+
             for (int i = 0; i < whitePieces["R"].size(); i++)
             {
                 string pos = whitePieces["R"][i];
@@ -322,7 +341,7 @@ class Board {
                 while (currRow < 7 && (board[currRow + 1][currCol].size() == 0 || board[currRow + 1][currCol].substr(0, 1) != "W"))
                 {
                     char newCol = pos.at(0) + currCol - col;
-                    int newRow = currRow+2;
+                    int newRow = currRow + 2;
                     if (board[currRow + 1][currCol].size() == 0)
                     {
                         output.push_back("R" + pos + string(1, newCol) + to_string(newRow));
@@ -336,11 +355,11 @@ class Board {
                 }
                 currRow = row;
                 currCol = col;
-                while (currCol > 0 && (board[currRow][currCol-1].size() == 0 || board[currRow][currCol-1].substr(0, 1) != "W"))
+                while (currCol > 0 && (board[currRow][currCol - 1].size() == 0 || board[currRow][currCol - 1].substr(0, 1) != "W"))
                 {
-                    char newCol = pos.at(0) + currCol - col-1;
-                    int newRow = currRow+1;
-                    if (board[currRow][currCol-1].size() == 0)
+                    char newCol = pos.at(0) + currCol - col - 1;
+                    int newRow = currRow + 1;
+                    if (board[currRow][currCol - 1].size() == 0)
                     {
                         output.push_back("R" + pos + string(1, newCol) + to_string(newRow));
                         currCol--;
@@ -353,11 +372,11 @@ class Board {
                 }
                 currRow = row;
                 currCol = col;
-                while (currCol < 7 && (board[currRow][currCol+1].size() == 0 || board[currRow][currCol+1].substr(0, 1) != "W"))
+                while (currCol < 7 && (board[currRow][currCol + 1].size() == 0 || board[currRow][currCol + 1].substr(0, 1) != "W"))
                 {
-                    char newCol = pos.at(0) + currCol - col+1;
-                    int newRow = currRow+1;
-                    if (board[currRow][currCol+1].size() == 0)
+                    char newCol = pos.at(0) + currCol - col + 1;
+                    int newRow = currRow + 1;
+                    if (board[currRow][currCol + 1].size() == 0)
                     {
                         output.push_back("R" + pos + string(1, newCol) + to_string(newRow));
                         currCol++;
@@ -369,9 +388,9 @@ class Board {
                     }
                 }
             }
-            
+
             //queen
-            
+
             for (int i = 0; i < whitePieces["Q"].size(); i++)
             {
                 string pos = whitePieces["Q"][i];
@@ -391,7 +410,7 @@ class Board {
                     }
                     else
                     {
-                        output.push_back("Q" + pos + "x" + board[currRow+1][currCol + 1].substr(1, 2) + string(1, newCol) + to_string(newRow));
+                        output.push_back("Q" + pos + "x" + board[currRow + 1][currCol + 1].substr(1, 2) + string(1, newCol) + to_string(newRow));
                         break;
                     }
                 }
@@ -409,7 +428,7 @@ class Board {
                     }
                     else
                     {
-                        output.push_back("Q" + pos + "x" + board[currRow+1][currCol - 1].substr(1, 2) + string(1, newCol) + to_string(newRow));
+                        output.push_back("Q" + pos + "x" + board[currRow + 1][currCol - 1].substr(1, 2) + string(1, newCol) + to_string(newRow));
                         break;
                     }
                 }
@@ -427,7 +446,7 @@ class Board {
                     }
                     else
                     {
-                        output.push_back("Q" + pos + "x" + board[currRow-1][currCol + 1].substr(1, 2) + string(1, newCol) + to_string(newRow));
+                        output.push_back("Q" + pos + "x" + board[currRow - 1][currCol + 1].substr(1, 2) + string(1, newCol) + to_string(newRow));
                         break;
                     }
                 }
@@ -445,7 +464,7 @@ class Board {
                     }
                     else
                     {
-                        output.push_back("Q" + pos + "x" + board[currRow-1][currCol - 1].substr(1, 2) + string(1, newCol) + to_string(newRow));
+                        output.push_back("Q" + pos + "x" + board[currRow - 1][currCol - 1].substr(1, 2) + string(1, newCol) + to_string(newRow));
                         break;
                     }
                 }
@@ -462,7 +481,7 @@ class Board {
                     }
                     else
                     {
-                        output.push_back("Q" + pos + "x" + board[currRow-1][currCol].substr(1, 2) + string(1, newCol) + to_string(newRow));
+                        output.push_back("Q" + pos + "x" + board[currRow - 1][currCol].substr(1, 2) + string(1, newCol) + to_string(newRow));
                         break;
                     }
                 }
@@ -479,7 +498,7 @@ class Board {
                     }
                     else
                     {
-                        output.push_back("Q" + pos + "x" + board[currRow+1][currCol].substr(1, 2) + string(1, newCol) + to_string(newRow));
+                        output.push_back("Q" + pos + "x" + board[currRow + 1][currCol].substr(1, 2) + string(1, newCol) + to_string(newRow));
                         break;
                     }
                 }
@@ -518,7 +537,7 @@ class Board {
                     }
                 }
             }
-            
+
             //king
 
             for (int i = 0; i < whitePieces["K"].size(); i++)
@@ -531,7 +550,7 @@ class Board {
                     char newCol = pos.at(0) - 1;
                     int newRow = row;
                     if (board[row - 1][col - 1].size() != 0)
-                        output.push_back("K" + pos + "x" + board[row-1][col - 1].substr(1, 2) + string(1, newCol) + to_string(newRow));
+                        output.push_back("K" + pos + "x" + board[row - 1][col - 1].substr(1, 2) + string(1, newCol) + to_string(newRow));
                     else
                         output.push_back("K" + pos + string(1, newCol) + to_string(newRow));
                 }
@@ -556,7 +575,7 @@ class Board {
                 if (row < 7 && col > 0 && (board[row + 1][col - 1].size() == 0 || board[row + 1][col - 1].substr(0, 1) != "W"))
                 {
                     char newCol = pos.at(0) - 1;
-                    int newRow = row+2;
+                    int newRow = row + 2;
                     if (board[row + 1][col - 1].size() != 0)
                         output.push_back("K" + pos + "x" + board[row + 1][col - 1].substr(1, 2) + string(1, newCol) + to_string(newRow));
                     else
@@ -574,7 +593,7 @@ class Board {
                 if (row < 7 && (board[row + 1][col].size() == 0 || board[row + 1][col].substr(0, 1) != "W"))
                 {
                     char newCol = pos.at(0);
-                    int newRow = row+2;
+                    int newRow = row + 2;
                     if (board[row + 1][col].size() != 0)
                         output.push_back("K" + pos + "x" + board[row + 1][col].substr(1, 2) + string(1, newCol) + to_string(newRow));
                     else
@@ -583,7 +602,7 @@ class Board {
                 if (col > 0 && (board[row][col - 1].size() == 0 || board[row][col - 1].substr(0, 1) != "W"))
                 {
                     char newCol = pos.at(0) - 1;
-                    int newRow = row+1;
+                    int newRow = row + 1;
                     if (board[row][col - 1].size() != 0)
                         output.push_back("K" + pos + "x" + board[row][col - 1].substr(1, 2) + string(1, newCol) + to_string(newRow));
                     else
@@ -592,7 +611,7 @@ class Board {
                 if (col < 7 && (board[row][col + 1].size() == 0 || board[row][col + 1].substr(0, 1) != "W"))
                 {
                     char newCol = pos.at(0) + 1;
-                    int newRow = row+1;
+                    int newRow = row + 1;
                     if (board[row][col + 1].size() != 0)
                         output.push_back("K" + pos + "x" + board[row][col + 1].substr(1, 2) + string(1, newCol) + to_string(newRow));
                     else
@@ -602,512 +621,532 @@ class Board {
         }
         else
         {
-        //pawn
-        for (int i = 0; i < blackPieces["P"].size(); i++)
-        {
-            string pos = blackPieces["P"][i];
-            int row = stoi(pos.substr(1)) - 1;
-            int col = pos.at(0) - 'a';
-            if (pos.substr(1) == "7" && board[row - 2][col].size() == 0)
+            //pawn
+            for (int i = 0; i < blackPieces["P"].size(); i++)
             {
-                output.push_back("P" + pos + pos.substr(0, 1) + "5");
-            }
-            if (board[row - 1][col].size() == 0)
-            {
-                string newRow = to_string((stoi(pos.substr(1)) - 1));
-                if (newRow != "1")
-                    output.push_back("P" + pos + pos.substr(0, 1) + newRow);
-                else
+                string pos = blackPieces["P"][i];
+                int row = stoi(pos.substr(1)) - 1;
+                int col = pos.at(0) - 'a';
+                if (pos.substr(1) == "7" && board[row - 2][col].size() == 0)
                 {
-                    output.push_back("P" + pos + pos.substr(0, 1) + newRow + "=Q");
-                    output.push_back("P" + pos + pos.substr(0, 1) + newRow + "=R");
-                    output.push_back("P" + pos + pos.substr(0, 1) + newRow + "=B");
-                    output.push_back("P" + pos + pos.substr(0, 1) + newRow + "=N");
+                    output.push_back("P" + pos + pos.substr(0, 1) + "5");
+                }
+                if (board[row - 1][col].size() == 0)
+                {
+                    string newRow = to_string((stoi(pos.substr(1)) - 1));
+                    if (newRow != "1")
+                        output.push_back("P" + pos + pos.substr(0, 1) + newRow);
+                    else
+                    {
+                        output.push_back("P" + pos + pos.substr(0, 1) + newRow + "=Q");
+                        output.push_back("P" + pos + pos.substr(0, 1) + newRow + "=R");
+                        output.push_back("P" + pos + pos.substr(0, 1) + newRow + "=B");
+                        output.push_back("P" + pos + pos.substr(0, 1) + newRow + "=N");
+                    }
+                }
+                if (col > 0 && board[row - 1][col - 1].size() != 0 && board[row - 1][col - 1].substr(0, 1) == "W")
+                {
+                    char newCol = pos.at(0) - 1;
+                    if (row != 1)
+                    {
+                        output.push_back("P" + pos + "x" + board[row - 1][col - 1].substr(1, 2) + newCol + "" + to_string(row));
+                    }
+                    else
+                    {
+                        output.push_back("P" + pos + "x" + board[row - 1][col - 1].substr(1, 2) + newCol + "" + to_string(row) + "=Q");
+                        output.push_back("P" + pos + "x" + board[row - 1][col - 1].substr(1, 2) + newCol + "" + to_string(row) + "=R");
+                        output.push_back("P" + pos + "x" + board[row - 1][col - 1].substr(1, 2) + newCol + "" + to_string(row) + "=B");
+                        output.push_back("P" + pos + "x" + board[row - 1][col - 1].substr(1, 2) + newCol + "" + to_string(row) + "=N");
+                    }
+                }
+                if (col < 7 && board[row - 1][col + 1].size() != 0 && board[row - 1][col + 1].substr(0, 1) == "W")
+                {
+                    char newCol = pos.at(0) + 1;
+                    if (row != 1)
+                    {
+                        output.push_back("P" + pos + "x" + board[row - 1][col + 1].substr(1, 2) + newCol + "" + to_string(row));
+                    }
+                    else
+                    {
+                        output.push_back("P" + pos + "x" + board[row - 1][col + 1].substr(1, 2) + newCol + "" + to_string(row) + "=Q");
+                        output.push_back("P" + pos + "x" + board[row - 1][col + 1].substr(1, 2) + newCol + "" + to_string(row) + "=R");
+                        output.push_back("P" + pos + "x" + board[row - 1][col + 1].substr(1, 2) + newCol + "" + to_string(row) + "=B");
+                        output.push_back("P" + pos + "x" + board[row - 1][col + 1].substr(1, 2) + newCol + "" + to_string(row) + "=N");
+                    }
                 }
             }
-            if (col > 0 && board[row - 1][col - 1].size() != 0 && board[row - 1][col - 1].substr(0, 1) == "W")
-            {
-                char newCol = pos.at(0) - 1;
-                output.push_back("P" + pos + "x" + board[row - 1][col - 1].substr(1, 2) + newCol + "" + to_string(row));
-            }
-            if (col < 7 && board[row - 1][col + 1].size() != 0 && board[row - 1][col + 1].substr(0, 1) == "W")
-            {
-                char newCol = pos.at(0) + 1;
-                output.push_back("P" + pos + "x" + board[row - 1][col + 1].substr(1, 2) + newCol + "" + to_string(row));
-            }
-        }
 
-        //knight
+            //knight
 
-        for (int i = 0; i < blackPieces["N"].size(); i++)
-        {
-            string pos = blackPieces["N"][i];
-            int row = stoi(pos.substr(1)) - 1;
-            int col = pos.at(0) - 'a';
-            if (row > 0 && col > 1 && (board[row - 1][col - 2].size() == 0 || board[row - 1][col - 2].substr(0, 1) != "B"))
+            for (int i = 0; i < blackPieces["N"].size(); i++)
             {
-                char newCol = pos.at(0) - 2;
-                if (board[row - 1][col - 2].size() != 0)
-                    output.push_back("N" + pos + "x" + board[row - 1][col - 2].substr(1, 2) + string(1, newCol) + to_string(row));
-                else
-                    output.push_back("N" + pos + string(1, newCol) + to_string(row));
+                string pos = blackPieces["N"][i];
+                int row = stoi(pos.substr(1)) - 1;
+                int col = pos.at(0) - 'a';
+                if (row > 0 && col > 1 && (board[row - 1][col - 2].size() == 0 || board[row - 1][col - 2].substr(0, 1) != "B"))
+                {
+                    char newCol = pos.at(0) - 2;
+                    if (board[row - 1][col - 2].size() != 0)
+                        output.push_back("N" + pos + "x" + board[row - 1][col - 2].substr(1, 2) + string(1, newCol) + to_string(row));
+                    else
+                        output.push_back("N" + pos + string(1, newCol) + to_string(row));
+                }
+                if (row > 0 && col < 6 && (board[row - 1][col + 2].size() == 0 || board[row - 1][col + 2].substr(0, 1) != "B"))
+                {
+                    char newCol = pos.at(0) + 2;
+                    if (board[row - 1][col + 2].size() != 0)
+                        output.push_back("N" + pos + "x" + board[row - 1][col + 2].substr(1, 2) + string(1, newCol) + to_string(row));
+                    else
+                        output.push_back("N" + pos + string(1, newCol) + to_string(row));
+                }
+                if (row > 1 && col > 0 && (board[row - 2][col - 1].size() == 0 || board[row - 2][col - 1].substr(0, 1) != "B"))
+                {
+                    char newCol = pos.at(0) - 1;
+                    if (board[row - 2][col - 1].size() != 0)
+                        output.push_back("N" + pos + "x" + board[row - 2][col - 1].substr(1, 2) + string(1, newCol) + to_string(row - 1));
+                    else
+                        output.push_back("N" + pos + string(1, newCol) + to_string(row - 1));
+                }
+                if (row > 1 && col < 7 && (board[row - 2][col + 1].size() == 0 || board[row - 2][col + 1].substr(0, 1) != "B"))
+                {
+                    char newCol = pos.at(0) + 1;
+                    if (board[row - 2][col + 1].size() != 0)
+                        output.push_back("N" + pos + "x" + board[row - 2][col + 1].substr(1, 2) + string(1, newCol) + to_string(row - 1));
+                    else
+                        output.push_back("N" + pos + string(1, newCol) + to_string(row - 1));
+                }
+                if (row < 7 && col > 1 && (board[row + 1][col - 2].size() == 0 || board[row + 1][col - 2].substr(0, 1) != "B"))
+                {
+                    char newCol = pos.at(0) - 2;
+                    if (board[row + 1][col - 2].size() != 0)
+                        output.push_back("N" + pos + "x" + board[row + 1][col - 2].substr(1, 2) + string(1, newCol) + to_string(row + 2));
+                    else
+                        output.push_back("N" + pos + string(1, newCol) + to_string(row + 2));
+                }
+                if (row < 7 && col < 6 && (board[row + 1][col + 2].size() == 0 || board[row + 1][col + 2].substr(0, 1) != "B"))
+                {
+                    char newCol = pos.at(0) + 2;
+                    if (board[row + 1][col + 2].size() != 0)
+                        output.push_back("N" + pos + "x" + board[row + 1][col + 2].substr(1, 2) + string(1, newCol) + to_string(row + 2));
+                    else
+                        output.push_back("N" + pos + string(1, newCol) + to_string(row + 2));
+                }
+                if (row < 6 && col < 7 && (board[row + 2][col + 1].size() == 0 || board[row + 2][col + 1].substr(0, 1) != "B"))
+                {
+                    char newCol = pos.at(0) + 1;
+                    if (board[row + 2][col + 1].size() != 0)
+                        output.push_back("N" + pos + "x" + board[row + 2][col + 1].substr(1, 2) + string(1, newCol) + to_string(row + 3));
+                    else
+                        output.push_back("N" + pos + string(1, newCol) + to_string(row + 3));
+                }
+                if (row < 6 && col > 0 && (board[row + 2][col - 1].size() == 0 || board[row + 2][col - 1].substr(0, 1) != "B"))
+                {
+                    char newCol = pos.at(0) - 1;
+                    if (board[row + 2][col - 1].size() != 0)
+                        output.push_back("N" + pos + "x" + board[row + 2][col - 1].substr(1, 2) + string(1, newCol) + to_string(row + 3));
+                    else
+                        output.push_back("N" + pos + string(1, newCol) + to_string(row + 3));
+                }
             }
-            if (row > 0 && col < 6 && (board[row - 1][col + 2].size() == 0 || board[row - 1][col + 2].substr(0, 1) != "B"))
-            {
-                char newCol = pos.at(0) + 2;
-                if (board[row - 1][col + 2].size() != 0)
-                    output.push_back("N" + pos + "x" + board[row - 1][col + 2].substr(1, 2) + string(1, newCol) + to_string(row));
-                else
-                    output.push_back("N" + pos + string(1, newCol) + to_string(row));
-            }
-            if (row > 1 && col > 0 && (board[row - 2][col - 1].size() == 0 || board[row - 2][col - 1].substr(0, 1) != "B"))
-            {
-                char newCol = pos.at(0) - 1;
-                if (board[row - 2][col - 1].size() != 0)
-                    output.push_back("N" + pos + "x" + board[row - 2][col - 1].substr(1, 2) + string(1, newCol) + to_string(row - 1));
-                else
-                    output.push_back("N" + pos + string(1, newCol) + to_string(row - 1));
-            }
-            if (row > 1 && col < 7 && (board[row - 2][col + 1].size() == 0 || board[row - 2][col + 1].substr(0, 1) != "B"))
-            {
-                char newCol = pos.at(0) + 1;
-                if (board[row - 2][col + 1].size() != 0)
-                    output.push_back("N" + pos + "x" + board[row - 2][col + 1].substr(1, 2) + string(1, newCol) + to_string(row - 1));
-                else
-                    output.push_back("N" + pos + string(1, newCol) + to_string(row - 1));
-            }
-            if (row < 7 && col > 1 && (board[row + 1][col - 2].size() == 0 || board[row + 1][col - 2].substr(0, 1) != "B"))
-            {
-                char newCol = pos.at(0) - 2;
-                if (board[row + 1][col - 2].size() != 0)
-                    output.push_back("N" + pos + "x" + board[row + 1][col - 2].substr(1, 2) + string(1, newCol) + to_string(row + 2));
-                else
-                    output.push_back("N" + pos + string(1, newCol) + to_string(row + 2));
-            }
-            if (row < 7 && col < 6 && (board[row + 1][col + 2].size() == 0 || board[row + 1][col + 2].substr(0, 1) != "B"))
-            {
-                char newCol = pos.at(0) + 2;
-                if (board[row + 1][col + 2].size() != 0)
-                    output.push_back("N" + pos + "x" + board[row + 1][col + 2].substr(1, 2) + string(1, newCol) + to_string(row + 2));
-                else
-                    output.push_back("N" + pos + string(1, newCol) + to_string(row + 2));
-            }
-            if (row < 6 && col < 7 && (board[row + 2][col + 1].size() == 0 || board[row + 2][col + 1].substr(0, 1) != "B"))
-            {
-                char newCol = pos.at(0) + 1;
-                if (board[row + 2][col + 1].size() != 0)
-                    output.push_back("N" + pos + "x" + board[row + 2][col + 1].substr(1, 2) + string(1, newCol) + to_string(row + 3));
-                else
-                    output.push_back("N" + pos + string(1, newCol) + to_string(row + 3));
-            }
-            if (row < 6 && col > 0 && (board[row + 2][col - 1].size() == 0 || board[row + 2][col - 1].substr(0, 1) != "B"))
-            {
-                char newCol = pos.at(0) - 1;
-                if (board[row + 2][col - 1].size() != 0)
-                    output.push_back("N" + pos + "x" + board[row + 2][col - 1].substr(1, 2) + string(1, newCol) + to_string(row + 3));
-                else
-                    output.push_back("N" + pos + string(1, newCol) + to_string(row + 3));
-            }
-        }
 
-        //bishop
+            //bishop
 
-        for (int i = 0; i < blackPieces["B"].size(); i++)
-        {
-            string pos = blackPieces["B"][i];
-            int row = stoi(pos.substr(1)) - 1;
-            int col = pos.at(0) - 'a';
-            int currRow = row;
-            int currCol = col;
-            while (currRow < 7 && currCol < 7 && (board[currRow + 1][currCol + 1].size() == 0 || board[currRow + 1][currCol + 1].substr(0, 1) != "B"))
+            for (int i = 0; i < blackPieces["B"].size(); i++)
             {
-                char newCol = pos.at(0) + currCol - col + 1;
-                int newRow = currRow + 2;
-                if (board[currRow + 1][currCol + 1].size() == 0)
+                string pos = blackPieces["B"][i];
+                int row = stoi(pos.substr(1)) - 1;
+                int col = pos.at(0) - 'a';
+                int currRow = row;
+                int currCol = col;
+                while (currRow < 7 && currCol < 7 && (board[currRow + 1][currCol + 1].size() == 0 || board[currRow + 1][currCol + 1].substr(0, 1) != "B"))
                 {
-                    output.push_back("B" + pos + string(1, newCol) + to_string(newRow));
-                    currRow++;
-                    currCol++;
+                    char newCol = pos.at(0) + currCol - col + 1;
+                    int newRow = currRow + 2;
+                    if (board[currRow + 1][currCol + 1].size() == 0)
+                    {
+                        output.push_back("B" + pos + string(1, newCol) + to_string(newRow));
+                        currRow++;
+                        currCol++;
+                    }
+                    else
+                    {
+                        output.push_back("B" + pos + "x" + board[currRow + 1][currCol + 1].substr(1, 2) + string(1, newCol) + to_string(newRow));
+                        break;
+                    }
                 }
-                else
+                currRow = row;
+                currCol = col;
+                while (currRow < 7 && currCol > 0 && (board[currRow + 1][currCol - 1].size() == 0 || board[currRow + 1][currCol - 1].substr(0, 1) != "B"))
                 {
-                    output.push_back("B" + pos + "x" + board[currRow + 1][currCol + 1].substr(1, 2) + string(1, newCol) + to_string(newRow));
-                    break;
+                    char newCol = pos.at(0) + currCol - col - 1;
+                    int newRow = currRow + 2;
+                    if (board[currRow + 1][currCol - 1].size() == 0)
+                    {
+                        output.push_back("B" + pos + string(1, newCol) + to_string(newRow));
+                        currRow++;
+                        currCol--;
+                    }
+                    else
+                    {
+                        output.push_back("B" + pos + "x" + board[currRow + 1][currCol - 1].substr(1, 2) + string(1, newCol) + to_string(newRow));
+                        break;
+                    }
+                }
+                currRow = row;
+                currCol = col;
+                while (currRow > 0 && currCol < 7 && (board[currRow - 1][currCol + 1].size() == 0 || board[currRow - 1][currCol + 1].substr(0, 1) != "B"))
+                {
+                    char newCol = pos.at(0) + currCol - col + 1;
+                    int newRow = currRow;
+                    if (board[currRow - 1][currCol + 1].size() == 0)
+                    {
+                        output.push_back("B" + pos + string(1, newCol) + to_string(newRow));
+                        currRow--;
+                        currCol++;
+                    }
+                    else
+                    {
+                        output.push_back("B" + pos + "x" + board[currRow - 1][currCol + 1].substr(1, 2) + string(1, newCol) + to_string(newRow));
+                        break;
+                    }
+                }
+                currRow = row;
+                currCol = col;
+                while (currRow > 0 && currCol > 0 && (board[currRow - 1][currCol - 1].size() == 0 || board[currRow - 1][currCol - 1].substr(0, 1) != "B"))
+                {
+                    char newCol = pos.at(0) + currCol - col - 1;
+                    int newRow = currRow;
+                    if (board[currRow - 1][currCol - 1].size() == 0)
+                    {
+                        output.push_back("B" + pos + string(1, newCol) + to_string(newRow));
+                        currRow--;
+                        currCol--;
+                    }
+                    else
+                    {
+                        output.push_back("B" + pos + "x" + board[currRow - 1][currCol - 1].substr(1, 2) + string(1, newCol) + to_string(newRow));
+                        break;
+                    }
                 }
             }
-            currRow = row;
-            currCol = col;
-            while (currRow < 7 && currCol > 0 && (board[currRow + 1][currCol - 1].size() == 0 || board[currRow + 1][currCol - 1].substr(0, 1) != "B"))
-            {
-                char newCol = pos.at(0) + currCol - col - 1;
-                int newRow = currRow + 2;
-                if (board[currRow + 1][currCol - 1].size() == 0)
-                {
-                    output.push_back("B" + pos + string(1, newCol) + to_string(newRow));
-                    currRow++;
-                    currCol--;
-                }
-                else
-                {
-                    output.push_back("B" + pos + "x" + board[currRow + 1][currCol - 1].substr(1, 2) + string(1, newCol) + to_string(newRow));
-                    break;
-                }
-            }
-            currRow = row;
-            currCol = col;
-            while (currRow > 0 && currCol < 7 && (board[currRow - 1][currCol + 1].size() == 0 || board[currRow - 1][currCol + 1].substr(0, 1) != "B"))
-            {
-                char newCol = pos.at(0) + currCol - col + 1;
-                int newRow = currRow;
-                if (board[currRow - 1][currCol + 1].size() == 0)
-                {
-                    output.push_back("B" + pos + string(1, newCol) + to_string(newRow));
-                    currRow--;
-                    currCol++;
-                }
-                else
-                {
-                    output.push_back("B" + pos + "x" + board[currRow - 1][currCol + 1].substr(1, 2) + string(1, newCol) + to_string(newRow));
-                    break;
-                }
-            }
-            currRow = row;
-            currCol = col;
-            while (currRow > 0 && currCol > 0 && (board[currRow - 1][currCol - 1].size() == 0 || board[currRow - 1][currCol - 1].substr(0, 1) != "B"))
-            {
-                char newCol = pos.at(0) + currCol - col - 1;
-                int newRow = currRow;
-                if (board[currRow - 1][currCol - 1].size() == 0)
-                {
-                    output.push_back("B" + pos + string(1, newCol) + to_string(newRow));
-                    currRow--;
-                    currCol--;
-                }
-                else
-                {
-                    output.push_back("B" + pos + "x" + board[currRow - 1][currCol - 1].substr(1, 2) + string(1, newCol) + to_string(newRow));
-                    break;
-                }
-            }
-        }
 
-        //rook
+            //rook
 
-        for (int i = 0; i < blackPieces["R"].size(); i++)
-        {
-            string pos = blackPieces["R"][i];
-            int row = stoi(pos.substr(1)) - 1;
-            int col = pos.at(0) - 'a';
-            int currRow = row;
-            int currCol = col;
-            while (currRow > 0 && (board[currRow - 1][currCol].size() == 0 || board[currRow - 1][currCol].substr(0, 1) != "B"))
+            for (int i = 0; i < blackPieces["R"].size(); i++)
             {
-                char newCol = pos.at(0) + currCol - col;
-                int newRow = currRow;
-                if (board[currRow - 1][currCol].size() == 0)
+                string pos = blackPieces["R"][i];
+                int row = stoi(pos.substr(1)) - 1;
+                int col = pos.at(0) - 'a';
+                int currRow = row;
+                int currCol = col;
+                while (currRow > 0 && (board[currRow - 1][currCol].size() == 0 || board[currRow - 1][currCol].substr(0, 1) != "B"))
                 {
-                    output.push_back("R" + pos + string(1, newCol) + to_string(newRow));
-                    currRow--;
+                    char newCol = pos.at(0) + currCol - col;
+                    int newRow = currRow;
+                    if (board[currRow - 1][currCol].size() == 0)
+                    {
+                        output.push_back("R" + pos + string(1, newCol) + to_string(newRow));
+                        currRow--;
+                    }
+                    else
+                    {
+                        output.push_back("R" + pos + "x" + board[currRow - 1][currCol].substr(1, 2) + string(1, newCol) + to_string(newRow));
+                        break;
+                    }
                 }
-                else
+                currRow = row;
+                currCol = col;
+                while (currRow < 7 && (board[currRow + 1][currCol].size() == 0 || board[currRow + 1][currCol].substr(0, 1) != "B"))
                 {
-                    output.push_back("R" + pos + "x" + board[currRow - 1][currCol].substr(1, 2) + string(1, newCol) + to_string(newRow));
-                    break;
+                    char newCol = pos.at(0) + currCol - col;
+                    int newRow = currRow + 2;
+                    if (board[currRow + 1][currCol].size() == 0)
+                    {
+                        output.push_back("R" + pos + string(1, newCol) + to_string(newRow));
+                        currRow++;
+                    }
+                    else
+                    {
+                        output.push_back("R" + pos + "x" + board[currRow + 1][currCol].substr(1, 2) + string(1, newCol) + to_string(newRow));
+                        break;
+                    }
+                }
+                currRow = row;
+                currCol = col;
+                while (currCol > 0 && (board[currRow][currCol - 1].size() == 0 || board[currRow][currCol - 1].substr(0, 1) != "B"))
+                {
+                    char newCol = pos.at(0) + currCol - col - 1;
+                    int newRow = currRow + 1;
+                    if (board[currRow][currCol - 1].size() == 0)
+                    {
+                        output.push_back("R" + pos + string(1, newCol) + to_string(newRow));
+                        currCol--;
+                    }
+                    else
+                    {
+                        output.push_back("R" + pos + "x" + board[currRow][currCol - 1].substr(1, 2) + string(1, newCol) + to_string(newRow));
+                        break;
+                    }
+                }
+                currRow = row;
+                currCol = col;
+                while (currCol < 7 && (board[currRow][currCol + 1].size() == 0 || board[currRow][currCol + 1].substr(0, 1) != "B"))
+                {
+                    char newCol = pos.at(0) + currCol - col + 1;
+                    int newRow = currRow + 1;
+                    if (board[currRow][currCol + 1].size() == 0)
+                    {
+                        output.push_back("R" + pos + string(1, newCol) + to_string(newRow));
+                        currCol++;
+                    }
+                    else
+                    {
+                        output.push_back("R" + pos + "x" + board[currRow][currCol + 1].substr(1, 2) + string(1, newCol) + to_string(newRow));
+                        break;
+                    }
                 }
             }
-            currRow = row;
-            currCol = col;
-            while (currRow < 7 && (board[currRow + 1][currCol].size() == 0 || board[currRow + 1][currCol].substr(0, 1) != "B"))
-            {
-                char newCol = pos.at(0) + currCol - col;
-                int newRow = currRow + 2;
-                if (board[currRow + 1][currCol].size() == 0)
-                {
-                    output.push_back("R" + pos + string(1, newCol) + to_string(newRow));
-                    currRow++;
-                }
-                else
-                {
-                    output.push_back("R" + pos + "x" + board[currRow + 1][currCol].substr(1, 2) + string(1, newCol) + to_string(newRow));
-                    break;
-                }
-            }
-            currRow = row;
-            currCol = col;
-            while (currCol > 0 && (board[currRow][currCol - 1].size() == 0 || board[currRow][currCol - 1].substr(0, 1) != "B"))
-            {
-                char newCol = pos.at(0) + currCol - col - 1;
-                int newRow = currRow + 1;
-                if (board[currRow][currCol - 1].size() == 0)
-                {
-                    output.push_back("R" + pos + string(1, newCol) + to_string(newRow));
-                    currCol--;
-                }
-                else
-                {
-                    output.push_back("R" + pos + "x" + board[currRow][currCol - 1].substr(1, 2) + string(1, newCol) + to_string(newRow));
-                    break;
-                }
-            }
-            currRow = row;
-            currCol = col;
-            while (currCol < 7 && (board[currRow][currCol + 1].size() == 0 || board[currRow][currCol + 1].substr(0, 1) != "B"))
-            {
-                char newCol = pos.at(0) + currCol - col + 1;
-                int newRow = currRow + 1;
-                if (board[currRow][currCol + 1].size() == 0)
-                {
-                    output.push_back("R" + pos + string(1, newCol) + to_string(newRow));
-                    currCol++;
-                }
-                else
-                {
-                    output.push_back("R" + pos + "x" + board[currRow][currCol + 1].substr(1, 2) + string(1, newCol) + to_string(newRow));
-                    break;
-                }
-            }
-        }
 
-        //queen
+            //queen
 
-        for (int i = 0; i < blackPieces["Q"].size(); i++)
-        {
-            string pos = blackPieces["Q"][i];
-            int row = stoi(pos.substr(1)) - 1;
-            int col = pos.at(0) - 'a';
-            int currRow = row;
-            int currCol = col;
-            while (currRow < 7 && currCol < 7 && (board[currRow + 1][currCol + 1].size() == 0 || board[currRow + 1][currCol + 1].substr(0, 1) != "B"))
+            for (int i = 0; i < blackPieces["Q"].size(); i++)
             {
-                char newCol = pos.at(0) + currCol - col + 1;
-                int newRow = currRow + 2;
-                if (board[currRow + 1][currCol + 1].size() == 0)
+                string pos = blackPieces["Q"][i];
+                int row = stoi(pos.substr(1)) - 1;
+                int col = pos.at(0) - 'a';
+                int currRow = row;
+                int currCol = col;
+                while (currRow < 7 && currCol < 7 && (board[currRow + 1][currCol + 1].size() == 0 || board[currRow + 1][currCol + 1].substr(0, 1) != "B"))
                 {
-                    output.push_back("Q" + pos + string(1, newCol) + to_string(newRow));
-                    currRow++;
-                    currCol++;
+                    char newCol = pos.at(0) + currCol - col + 1;
+                    int newRow = currRow + 2;
+                    if (board[currRow + 1][currCol + 1].size() == 0)
+                    {
+                        output.push_back("Q" + pos + string(1, newCol) + to_string(newRow));
+                        currRow++;
+                        currCol++;
+                    }
+                    else
+                    {
+                        output.push_back("Q" + pos + "x" + board[currRow + 1][currCol + 1].substr(1, 2) + string(1, newCol) + to_string(newRow));
+                        break;
+                    }
                 }
-                else
+                currRow = row;
+                currCol = col;
+                while (currRow < 7 && currCol > 0 && (board[currRow + 1][currCol - 1].size() == 0 || board[currRow + 1][currCol - 1].substr(0, 1) != "B"))
                 {
-                    output.push_back("Q" + pos + "x" + board[currRow + 1][currCol + 1].substr(1, 2) + string(1, newCol) + to_string(newRow));
-                    break;
+                    char newCol = pos.at(0) + currCol - col - 1;
+                    int newRow = currRow + 2;
+                    if (board[currRow + 1][currCol - 1].size() == 0)
+                    {
+                        output.push_back("Q" + pos + string(1, newCol) + to_string(newRow));
+                        currRow++;
+                        currCol--;
+                    }
+                    else
+                    {
+                        output.push_back("Q" + pos + "x" + board[currRow + 1][currCol - 1].substr(1, 2) + string(1, newCol) + to_string(newRow));
+                        break;
+                    }
+                }
+                currRow = row;
+                currCol = col;
+                while (currRow > 0 && currCol < 7 && (board[currRow - 1][currCol + 1].size() == 0 || board[currRow - 1][currCol + 1].substr(0, 1) != "B"))
+                {
+                    char newCol = pos.at(0) + currCol - col + 1;
+                    int newRow = currRow;
+                    if (board[currRow - 1][currCol + 1].size() == 0)
+                    {
+                        output.push_back("Q" + pos + string(1, newCol) + to_string(newRow));
+                        currRow--;
+                        currCol++;
+                    }
+                    else
+                    {
+                        output.push_back("Q" + pos + "x" + board[currRow - 1][currCol + 1].substr(1, 2) + string(1, newCol) + to_string(newRow));
+                        break;
+                    }
+                }
+                currRow = row;
+                currCol = col;
+                while (currRow > 0 && currCol > 0 && (board[currRow - 1][currCol - 1].size() == 0 || board[currRow - 1][currCol - 1].substr(0, 1) != "B"))
+                {
+                    char newCol = pos.at(0) + currCol - col - 1;
+                    int newRow = currRow;
+                    if (board[currRow - 1][currCol - 1].size() == 0)
+                    {
+                        output.push_back("Q" + pos + string(1, newCol) + to_string(newRow));
+                        currRow--;
+                        currCol--;
+                    }
+                    else
+                    {
+                        output.push_back("Q" + pos + "x" + board[currRow - 1][currCol - 1].substr(1, 2) + string(1, newCol) + to_string(newRow));
+                        break;
+                    }
+                }
+                currRow = row;
+                currCol = col;
+                while (currRow > 0 && (board[currRow - 1][currCol].size() == 0 || board[currRow - 1][currCol].substr(0, 1) != "B"))
+                {
+                    char newCol = pos.at(0) + currCol - col;
+                    int newRow = currRow;
+                    if (board[currRow - 1][currCol].size() == 0)
+                    {
+                        output.push_back("Q" + pos + string(1, newCol) + to_string(newRow));
+                        currRow--;
+                    }
+                    else
+                    {
+                        output.push_back("Q" + pos + "x" + board[currRow - 1][currCol].substr(1, 2) + string(1, newCol) + to_string(newRow));
+                        break;
+                    }
+                }
+                currRow = row;
+                currCol = col;
+                while (currRow < 7 && (board[currRow + 1][currCol].size() == 0 || board[currRow + 1][currCol].substr(0, 1) != "B"))
+                {
+                    char newCol = pos.at(0) + currCol - col;
+                    int newRow = currRow + 2;
+                    if (board[currRow + 1][currCol].size() == 0)
+                    {
+                        output.push_back("Q" + pos + string(1, newCol) + to_string(newRow));
+                        currRow++;
+                    }
+                    else
+                    {
+                        output.push_back("Q" + pos + "x" + board[currRow + 1][currCol].substr(1, 2) + string(1, newCol) + to_string(newRow));
+                        break;
+                    }
+                }
+                currRow = row;
+                currCol = col;
+                while (currCol > 0 && (board[currRow][currCol - 1].size() == 0 || board[currRow][currCol - 1].substr(0, 1) != "B"))
+                {
+                    char newCol = pos.at(0) + currCol - col - 1;
+                    int newRow = currRow + 1;
+                    if (board[currRow][currCol - 1].size() == 0)
+                    {
+                        output.push_back("Q" + pos + string(1, newCol) + to_string(newRow));
+                        currCol--;
+                    }
+                    else
+                    {
+                        output.push_back("Q" + pos + "x" + board[currRow][currCol - 1].substr(1, 2) + string(1, newCol) + to_string(newRow));
+                        break;
+                    }
+                }
+                currRow = row;
+                currCol = col;
+                while (currCol < 7 && (board[currRow][currCol + 1].size() == 0 || board[currRow][currCol + 1].substr(0, 1) != "B"))
+                {
+                    char newCol = pos.at(0) + currCol - col + 1;
+                    int newRow = currRow + 1;
+                    if (board[currRow][currCol + 1].size() == 0)
+                    {
+                        output.push_back("Q" + pos + string(1, newCol) + to_string(newRow));
+                        currCol++;
+                    }
+                    else
+                    {
+                        output.push_back("Q" + pos + "x" + board[currRow][currCol + 1].substr(1, 2) + string(1, newCol) + to_string(newRow));
+                        break;
+                    }
                 }
             }
-            currRow = row;
-            currCol = col;
-            while (currRow < 7 && currCol > 0 && (board[currRow + 1][currCol - 1].size() == 0 || board[currRow + 1][currCol - 1].substr(0, 1) != "B"))
-            {
-                char newCol = pos.at(0) + currCol - col - 1;
-                int newRow = currRow + 2;
-                if (board[currRow + 1][currCol - 1].size() == 0)
-                {
-                    output.push_back("Q" + pos + string(1, newCol) + to_string(newRow));
-                    currRow++;
-                    currCol--;
-                }
-                else
-                {
-                    output.push_back("Q" + pos + "x" + board[currRow + 1][currCol - 1].substr(1, 2) + string(1, newCol) + to_string(newRow));
-                    break;
-                }
-            }
-            currRow = row;
-            currCol = col;
-            while (currRow > 0 && currCol < 7 && (board[currRow - 1][currCol + 1].size() == 0 || board[currRow - 1][currCol + 1].substr(0, 1) != "B"))
-            {
-                char newCol = pos.at(0) + currCol - col + 1;
-                int newRow = currRow;
-                if (board[currRow - 1][currCol + 1].size() == 0)
-                {
-                    output.push_back("Q" + pos + string(1, newCol) + to_string(newRow));
-                    currRow--;
-                    currCol++;
-                }
-                else
-                {
-                    output.push_back("Q" + pos + "x" + board[currRow - 1][currCol + 1].substr(1, 2) + string(1, newCol) + to_string(newRow));
-                    break;
-                }
-            }
-            currRow = row;
-            currCol = col;
-            while (currRow > 0 && currCol > 0 && (board[currRow - 1][currCol - 1].size() == 0 || board[currRow - 1][currCol - 1].substr(0, 1) != "B"))
-            {
-                char newCol = pos.at(0) + currCol - col - 1;
-                int newRow = currRow;
-                if (board[currRow - 1][currCol - 1].size() == 0)
-                {
-                    output.push_back("Q" + pos + string(1, newCol) + to_string(newRow));
-                    currRow--;
-                    currCol--;
-                }
-                else
-                {
-                    output.push_back("Q" + pos + "x" + board[currRow - 1][currCol - 1].substr(1, 2) + string(1, newCol) + to_string(newRow));
-                    break;
-                }
-            }
-            currRow = row;
-            currCol = col;
-            while (currRow > 0 && (board[currRow - 1][currCol].size() == 0 || board[currRow - 1][currCol].substr(0, 1) != "B"))
-            {
-                char newCol = pos.at(0) + currCol - col;
-                int newRow = currRow;
-                if (board[currRow - 1][currCol].size() == 0)
-                {
-                    output.push_back("Q" + pos + string(1, newCol) + to_string(newRow));
-                    currRow--;
-                }
-                else
-                {
-                    output.push_back("Q" + pos + "x" + board[currRow - 1][currCol].substr(1, 2) + string(1, newCol) + to_string(newRow));
-                    break;
-                }
-            }
-            currRow = row;
-            currCol = col;
-            while (currRow < 7 && (board[currRow + 1][currCol].size() == 0 || board[currRow + 1][currCol].substr(0, 1) != "B"))
-            {
-                char newCol = pos.at(0) + currCol - col;
-                int newRow = currRow + 2;
-                if (board[currRow + 1][currCol].size() == 0)
-                {
-                    output.push_back("Q" + pos + string(1, newCol) + to_string(newRow));
-                    currRow++;
-                }
-                else
-                {
-                    output.push_back("Q" + pos + "x" + board[currRow + 1][currCol].substr(1, 2) + string(1, newCol) + to_string(newRow));
-                    break;
-                }
-            }
-            currRow = row;
-            currCol = col;
-            while (currCol > 0 && (board[currRow][currCol - 1].size() == 0 || board[currRow][currCol - 1].substr(0, 1) != "B"))
-            {
-                char newCol = pos.at(0) + currCol - col - 1;
-                int newRow = currRow + 1;
-                if (board[currRow][currCol - 1].size() == 0)
-                {
-                    output.push_back("Q" + pos + string(1, newCol) + to_string(newRow));
-                    currCol--;
-                }
-                else
-                {
-                    output.push_back("Q" + pos + "x" + board[currRow][currCol - 1].substr(1, 2) + string(1, newCol) + to_string(newRow));
-                    break;
-                }
-            }
-            currRow = row;
-            currCol = col;
-            while (currCol < 7 && (board[currRow][currCol + 1].size() == 0 || board[currRow][currCol + 1].substr(0, 1) != "B"))
-            {
-                char newCol = pos.at(0) + currCol - col + 1;
-                int newRow = currRow + 1;
-                if (board[currRow][currCol + 1].size() == 0)
-                {
-                    output.push_back("Q" + pos + string(1, newCol) + to_string(newRow));
-                    currCol++;
-                }
-                else
-                {
-                    output.push_back("Q" + pos + "x" + board[currRow][currCol + 1].substr(1, 2) + string(1, newCol) + to_string(newRow));
-                    break;
-                }
-            }
-        }
 
-        //king
+            //king
 
-        for (int i = 0; i < blackPieces["K"].size(); i++)
-        {
-            string pos = blackPieces["Q"][i];
-            int row = stoi(pos.substr(1)) - 1;
-            int col = pos.at(0) - 'a';
-            if (row > 0 && col > 0 && (board[row - 1][col - 1].size() == 0 || board[row - 1][col - 1].substr(0, 1) != "B"))
+            for (int i = 0; i < blackPieces["K"].size(); i++)
             {
-                char newCol = pos.at(0) - 1;
-                int newRow = row;
-                if (board[row - 1][col - 1].size() != 0)
-                    output.push_back("K" + pos + "x" + board[row - 1][col - 1].substr(1, 2) + string(1, newCol) + to_string(newRow));
-                else
-                    output.push_back("K" + pos + string(1, newCol) + to_string(newRow));
+                string pos = blackPieces["Q"][i];
+                int row = stoi(pos.substr(1)) - 1;
+                int col = pos.at(0) - 'a';
+                if (row > 0 && col > 0 && (board[row - 1][col - 1].size() == 0 || board[row - 1][col - 1].substr(0, 1) != "B"))
+                {
+                    char newCol = pos.at(0) - 1;
+                    int newRow = row;
+                    if (board[row - 1][col - 1].size() != 0)
+                        output.push_back("K" + pos + "x" + board[row - 1][col - 1].substr(1, 2) + string(1, newCol) + to_string(newRow));
+                    else
+                        output.push_back("K" + pos + string(1, newCol) + to_string(newRow));
+                }
+                if (row > 0 && col < 7 && (board[row - 1][col + 1].size() == 0 || board[row - 1][col + 1].substr(0, 1) != "B"))
+                {
+                    char newCol = pos.at(0) + 1;
+                    int newRow = row;
+                    if (board[row - 1][col + 1].size() != 0)
+                        output.push_back("K" + pos + "x" + board[row - 1][col + 1].substr(1, 2) + string(1, newCol) + to_string(newRow));
+                    else
+                        output.push_back("K" + pos + string(1, newCol) + to_string(newRow));
+                }
+                if (row > 0 && (board[row - 1][col].size() == 0 || board[row - 1][col].substr(0, 1) != "B"))
+                {
+                    char newCol = pos.at(0);
+                    int newRow = row;
+                    if (board[row - 1][col].size() != 0)
+                        output.push_back("K" + pos + "x" + board[row - 1][col].substr(1, 2) + string(1, newCol) + to_string(newRow));
+                    else
+                        output.push_back("K" + pos + string(1, newCol) + to_string(newRow));
+                }
+                if (row < 7 && col > 0 && (board[row + 1][col - 1].size() == 0 || board[row + 1][col - 1].substr(0, 1) != "B"))
+                {
+                    char newCol = pos.at(0) - 1;
+                    int newRow = row + 2;
+                    if (board[row + 1][col - 1].size() != 0)
+                        output.push_back("K" + pos + "x" + board[row + 1][col - 1].substr(1, 2) + string(1, newCol) + to_string(newRow));
+                    else
+                        output.push_back("K" + pos + string(1, newCol) + to_string(newRow));
+                }
+                if (row < 7 && col < 7 && (board[row + 1][col + 1].size() == 0 || board[row + 1][col + 1].substr(0, 1) != "B"))
+                {
+                    char newCol = pos.at(0) + 1;
+                    int newRow = row + 2;
+                    if (board[row + 1][col + 1].size() != 0)
+                        output.push_back("K" + pos + "x" + board[row + 1][col + 1].substr(1, 2) + string(1, newCol) + to_string(newRow));
+                    else
+                        output.push_back("K" + pos + string(1, newCol) + to_string(newRow));
+                }
+                if (row < 7 && (board[row + 1][col].size() == 0 || board[row + 1][col].substr(0, 1) != "B"))
+                {
+                    char newCol = pos.at(0);
+                    int newRow = row + 2;
+                    if (board[row + 1][col].size() != 0)
+                        output.push_back("K" + pos + "x" + board[row + 1][col].substr(1, 2) + string(1, newCol) + to_string(newRow));
+                    else
+                        output.push_back("K" + pos + string(1, newCol) + to_string(newRow));
+                }
+                if (col > 0 && (board[row][col - 1].size() == 0 || board[row][col - 1].substr(0, 1) != "B"))
+                {
+                    char newCol = pos.at(0) - 1;
+                    int newRow = row + 1;
+                    if (board[row][col - 1].size() != 0)
+                        output.push_back("K" + pos + "x" + board[row][col - 1].substr(1, 2) + string(1, newCol) + to_string(newRow));
+                    else
+                        output.push_back("K" + pos + string(1, newCol) + to_string(newRow));
+                }
+                if (col < 7 && (board[row][col + 1].size() == 0 || board[row][col + 1].substr(0, 1) != "B"))
+                {
+                    char newCol = pos.at(0) + 1;
+                    int newRow = row + 1;
+                    if (board[row][col + 1].size() != 0)
+                        output.push_back("K" + pos + "x" + board[row][col + 1].substr(1, 2) + string(1, newCol) + to_string(newRow));
+                    else
+                        output.push_back("K" + pos + string(1, newCol) + to_string(newRow));
+                }
             }
-            if (row > 0 && col < 7 && (board[row - 1][col + 1].size() == 0 || board[row - 1][col + 1].substr(0, 1) != "B"))
-            {
-                char newCol = pos.at(0) + 1;
-                int newRow = row;
-                if (board[row - 1][col + 1].size() != 0)
-                    output.push_back("K" + pos + "x" + board[row - 1][col + 1].substr(1, 2) + string(1, newCol) + to_string(newRow));
-                else
-                    output.push_back("K" + pos + string(1, newCol) + to_string(newRow));
-            }
-            if (row > 0 && (board[row - 1][col].size() == 0 || board[row - 1][col].substr(0, 1) != "B"))
-            {
-                char newCol = pos.at(0);
-                int newRow = row;
-                if (board[row - 1][col].size() != 0)
-                    output.push_back("K" + pos + "x" + board[row - 1][col].substr(1, 2) + string(1, newCol) + to_string(newRow));
-                else
-                    output.push_back("K" + pos + string(1, newCol) + to_string(newRow));
-            }
-            if (row < 7 && col > 0 && (board[row + 1][col - 1].size() == 0 || board[row + 1][col - 1].substr(0, 1) != "B"))
-            {
-                char newCol = pos.at(0) - 1;
-                int newRow = row + 2;
-                if (board[row + 1][col - 1].size() != 0)
-                    output.push_back("K" + pos + "x" + board[row + 1][col - 1].substr(1, 2) + string(1, newCol) + to_string(newRow));
-                else
-                    output.push_back("K" + pos + string(1, newCol) + to_string(newRow));
-            }
-            if (row < 7 && col < 7 && (board[row + 1][col + 1].size() == 0 || board[row + 1][col + 1].substr(0, 1) != "B"))
-            {
-                char newCol = pos.at(0) + 1;
-                int newRow = row + 2;
-                if (board[row + 1][col + 1].size() != 0)
-                    output.push_back("K" + pos + "x" + board[row + 1][col + 1].substr(1, 2) + string(1, newCol) + to_string(newRow));
-                else
-                    output.push_back("K" + pos + string(1, newCol) + to_string(newRow));
-            }
-            if (row < 7 && (board[row + 1][col].size() == 0 || board[row + 1][col].substr(0, 1) != "B"))
-            {
-                char newCol = pos.at(0);
-                int newRow = row + 2;
-                if (board[row + 1][col].size() != 0)
-                    output.push_back("K" + pos + "x" + board[row + 1][col].substr(1, 2) + string(1, newCol) + to_string(newRow));
-                else
-                    output.push_back("K" + pos + string(1, newCol) + to_string(newRow));
-            }
-            if (col > 0 && (board[row][col - 1].size() == 0 || board[row][col - 1].substr(0, 1) != "B"))
-            {
-                char newCol = pos.at(0) - 1;
-                int newRow = row + 1;
-                if (board[row][col - 1].size() != 0)
-                    output.push_back("K" + pos + "x" + board[row][col - 1].substr(1, 2) + string(1, newCol) + to_string(newRow));
-                else
-                    output.push_back("K" + pos + string(1, newCol) + to_string(newRow));
-            }
-            if (col < 7 && (board[row][col + 1].size() == 0 || board[row][col + 1].substr(0, 1) != "B"))
-            {
-                char newCol = pos.at(0) + 1;
-                int newRow = row+1;
-                if (board[row][col + 1].size() != 0)
-                    output.push_back("K" + pos + "x" + board[row][col + 1].substr(1, 2) + string(1, newCol) + to_string(newRow));
-                else
-                    output.push_back("K" + pos + string(1, newCol) + to_string(newRow));
-            }
-        }
         }
         return output;
     }
 
-    double getEvaluation(){
+    double getEvaluation() {
         double output = 0;
         //white pawns
         for (int i = 0; i < whitePieces["P"].size(); i++)
         {
             string pos = whitePieces["P"][i];
-            double pawnEval = 1 + (stod(pos.substr(1))-2)/10;
+            double pawnEval = 1 + (stod(pos.substr(1)) - 2) / 10;
             output += pawnEval;
         }
 
@@ -1116,7 +1155,7 @@ class Board {
         for (int i = 0; i < blackPieces["P"].size(); i++)
         {
             string pos = blackPieces["P"][i];
-            double pawnEval = 1 + (7 - stod(pos.substr(1)))/ 10;
+            double pawnEval = 1 + (7 - stod(pos.substr(1))) / 10;
             output -= pawnEval;
         }
 
@@ -1125,7 +1164,7 @@ class Board {
         for (int i = 0; i < whitePieces["N"].size(); i++)
         {
             string pos = whitePieces["N"][i];
-            int row = stoi(pos.substr(1))-1;
+            int row = stoi(pos.substr(1)) - 1;
             int col = pos.at(0) - 'a';
             double knightEval = 3 - abs(3.5 - row) / 20 - abs(3.5 - col) / 20;
             output += knightEval;
@@ -1154,7 +1193,7 @@ class Board {
             {
                 bishopEval += 0.3;
             }
-            else if (abs(row-col) == 1 || abs(row+col - 7) == 1)
+            else if (abs(row - col) == 1 || abs(row + col - 7) == 1)
             {
                 bishopEval += 0.4;
             }
@@ -1311,15 +1350,234 @@ class Board {
         string originPos = s.substr(1, 2);
         bool take = s.substr(3, 1) == "x";
         string finalPos;
+        bool promotion = false;
+        string promotionPiece = "";
+        string takenPiece;
         if (take)
         {
-            finalPos = s.substr(4, 2);
+            finalPos = s.substr(5, 2);
+            if (s.substr(7, 1) == "=")
+            {
+                promotionPiece = s.substr(8, 1);
+            }
+            takenPiece = s.substr(4, 1);
         }
         else
         {
             finalPos = s.substr(3, 2);
+            if (s.substr(5, 1) == "=")
+            {
+                promotionPiece = s.substr(6, 1);
+            }
         }
-
+        int originRow = stoi(originPos.substr(1)) - 1;
+        int originCol = originPos.at(0) - 'a';
+        int finalRow = stoi(finalPos.substr(1)) - 1;
+        int finalCol = finalPos.at(0) - 'a';
+        //change board
+        board[originRow][originCol] = "";
+        if (whiteMove)
+        {
+            if (promotion)
+            {
+                board[finalRow][finalCol] = "W" + promotionPiece;
+            }
+            else
+            {
+                board[finalRow][finalCol] = "W" + piece;
+            }
+        }
+        else
+        {
+            if (promotion)
+            {
+                board[finalRow][finalCol] = "B" + promotionPiece;
+            }
+            else
+            {
+                board[finalRow][finalCol] = "B" + piece;
+            }
+        }
+        //change black pieces
+        if (whiteMove)
+        {
+            if (take)
+            {
+                for (int i = 0; i < blackPieces[takenPiece].size(); i++)
+                {
+                    if (blackPieces[takenPiece][i] == finalPos)
+                    {
+                        blackPieces[takenPiece].erase(blackPieces[takenPiece].begin() + i);
+                        break;
+                    }
+                }
+            }
+        }
+        else
+        {
+            if (promotion)
+            {
+                blackPieces[promotionPiece].push_back(finalPos);
+            }
+            else {
+                for (int i = 0; i < blackPieces[piece].size(); i++)
+                {
+                    if (blackPieces[piece][i] == originPos)
+                    {
+                        blackPieces[piece][i] = finalPos;
+                        break;
+                    }
+                }
+            }
+        }
+        //change white pieces
+        if (!whiteMove)
+        {
+            if (take)
+            {
+                for (int i = 0; i < whitePieces[takenPiece].size(); i++)
+                {
+                    if (whitePieces[takenPiece][i] == finalPos)
+                    {
+                        whitePieces[takenPiece].erase(whitePieces[takenPiece].begin() + i);
+                        break;
+                    }
+                }
+            }
+        }
+        else
+        {
+            if (promotion)
+            {
+                whitePieces[promotionPiece].push_back(finalPos);
+            }
+            for (int i = 0; i < whitePieces[piece].size(); i++)
+            {
+                if (whitePieces[piece][i] == originPos)
+                {
+                    whitePieces[piece][i] = finalPos;
+                    break;
+                }
+            }
+        }
+        //change whiteMove
+        whiteMove = !whiteMove;
+    }
+    void undoMove(string s)
+    {
+        string piece = s.substr(0, 1);
+        string originPos = s.substr(1, 2);
+        bool take = s.substr(3, 1) == "x";
+        string finalPos;
+        bool promotion = false;
+        string promotionPiece = "";
+        string takenPiece;
+        if (take)
+        {
+            finalPos = s.substr(5, 2);
+            if (s.substr(7, 1) == "=")
+            {
+                promotionPiece = s.substr(8, 1);
+            }
+            takenPiece = s.substr(4, 1);
+        }
+        else
+        {
+            finalPos = s.substr(3, 2);
+            if (s.substr(5, 1) == "=")
+            {
+                promotionPiece = s.substr(6, 1);
+            }
+        }
+        int originRow = stoi(originPos.substr(1)) - 1;
+        int originCol = originPos.at(0) - 'a';
+        int finalRow = stoi(finalPos.substr(1)) - 1;
+        int finalCol = finalPos.at(0) - 'a';
+        //change board
+        if (whiteMove)
+        {
+            board[originRow][originCol] = "B" + piece;
+        }
+        else
+        {
+            board[originRow][originCol] = "W" + piece;
+        }
+        if (whiteMove)
+        {
+            if (take)
+            {
+                board[finalRow][finalCol] = "W" + takenPiece;
+            }
+            else
+            {
+                board[finalRow][finalCol] = "";
+            }
+        }
+        else
+        {
+            if (take)
+            {
+                board[finalRow][finalCol] = "B" + takenPiece;
+            }
+            else
+            {
+                board[finalRow][finalCol] = "";
+            }
+        }
+        //change blackpieces
+        if (whiteMove)
+        {
+            if (promotion)
+            {
+                blackPieces[promotionPiece].pop_back();
+                blackPieces[piece].push_back(originPos);
+            }
+            else
+            {
+                for (int i = 0; i < blackPieces[piece].size(); i++)
+                {
+                    if (blackPieces[piece][i] == finalPos)
+                    {
+                        blackPieces[piece][i] = originPos;
+                    }
+                }
+            }
+        }
+        else
+        {
+            if (take)
+            {
+                blackPieces[takenPiece].push_back(finalPos);
+            }
+        }
+        //change whitepieces
+        if (!whiteMove)
+        {
+            if (promotion)
+            {
+                whitePieces[promotionPiece].pop_back();
+                whitePieces[piece].push_back(originPos);
+            }
+            else
+            {
+                for (int i = 0; i < whitePieces[piece].size(); i++)
+                {
+                    if (whitePieces[piece][i] == finalPos)
+                    {
+                        whitePieces[piece][i] = originPos;
+                    }
+                }
+            }
+        }
+        else
+        {
+            if (take)
+            {
+                whitePieces[takenPiece].push_back(finalPos);
+            }
+        }
+        //change whitemove
+        whiteMove = !whiteMove;
     }
 };
 
